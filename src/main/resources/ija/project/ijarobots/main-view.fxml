@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Circle?>
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="ija.project.ijarobots.MainController"
+          fx:id="frame"
+          minWidth="-Infinity" minHeight="-Infinity">
+  <columnConstraints>
+    <ColumnConstraints percentWidth="100"/>
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints percentHeight="90"/>
+    <RowConstraints percentHeight="10"/>
+  </rowConstraints>
+  <padding>
+    <Insets bottom="20"/>
+  </padding>
+
+
+  <AnchorPane GridPane.fillHeight="true" GridPane.fillWidth="true"
+              GridPane.columnIndex="0"
+              GridPane.rowIndex="0"
+              style="-fx-background-color: white"
+              fx:id="robotPlayground">
+    <Circle fx:id="player" style="-fx-background-color: blue" radius="20" rotate="0"/>
+  </AnchorPane>
+
+  <Button fx:id="testBtn" text="chngColor" onAction="#changeBackground"
+            GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+
+  <Label fx:id="label" text="chngColor"
+          GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+</GridPane>
