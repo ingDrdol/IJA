@@ -1,6 +1,7 @@
 package ija.project.ijarobots;
 
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.robots.ControlledRobot;
 import ija.project.ijarobots.room.Room;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,40 +33,26 @@ public class MainController implements Initializable {
     Circle player;
     @FXML
     GridPane frame;
-
+    ControlledRobot playerModel;
     Room room;
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            int x = playerPos.getRow(), y = playerPos.getCol();
-            for(Character c: keys){
-                switch (c){
-                    case 'w':
-                        x = x - 5;
-                        break;
-                    case 's':
-                        x = x + 5;
-                        break;
-                    case 'a':
-                        y = y - 5;
-                        break;
-                    case 'd':
-                        y = y + 5;
-                        break;
+            for (var key: keys){
+                switch (key){
+                    case 'w' -> playerModel.changeDirY(-5);
+                    case 's' -> playerModel.changeDirY(5);
+                    case 'a' -> playerModel.changeDirX(-5);
+                    case 'd' -> playerModel.changeDirX(5);
                 }
             }
-
-            if (x + (int)player.getRadius() > room.getRows()){
-                x = room.getRows() - (int)player.getRadius();
-            }
-            if (y + (int)player.getRadius() > room.getCols()){
-                y = room.getCols() - (int)player.getRadius();
-            }
-
-            playerPos = new Position(x, y);
-            player.setLayoutX(y);
-            player.setLayoutY(x);
+            playerModel.move();
+            playerModel.stop();
+            Position p = playerModel.getPosition();
+            player.setLayoutX(p.getRow());
+            player.setLayoutY(p.getCol());
+            label.setText(String.format("rows: %d, cols: %d| %d, %d",room.getRows(), room.getCols(), p.getRow(), p.getCol()));
         }
     }));
 
@@ -77,7 +64,9 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
-        playerPos = new Position(50, 50);
+        playerModel = new ControlledRobot(50, 50, 20, room);
+        player.setFill(Color.BLUE);
+        player.setRadius(playerModel.getRadius());
         keyListenerSetUp();
         simulation.setCycleCount(Timeline.INDEFINITE);
         simulation.play();

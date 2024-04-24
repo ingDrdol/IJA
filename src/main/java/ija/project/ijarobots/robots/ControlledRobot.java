@@ -5,6 +5,7 @@ import ija.project.ijarobots.common.Area;
 import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
+import javafx.scene.shape.Shape;
 
 public class ControlledRobot implements Robot {
 
@@ -34,13 +35,19 @@ public class ControlledRobot implements Robot {
         return r.containsPosition(new Position(this.row, this.col));
     }
 
-    private boolean canMove(){
-        Position newPos = new Position(this.row+this.dirX, this.col+this.dirY);
-        return ar.obstacleAt(newPos);
+    @Override
+    public Shape getShape() {
+        return null;
     }
+
+    private boolean canMove(Position dest){
+        return !ar.robotCollision(this, dest);
+    }
+
     @Override
     public boolean move() {
-        if(this.canMove()) {
+        Position dest = new Position(this.row + this.dirX, this.col + this.dirY);
+        if(this.canMove(dest)) {
             this.row += this.dirX;
             this.col += this.dirY;
             return true;
@@ -49,12 +56,10 @@ public class ControlledRobot implements Robot {
     }
 
     public void changeDirX(int x){
-        this.dirX = x;
+        this.dirX = this.dirX + x;
     }
 
-    public void changeDirY(int y){
-        this.dirY = y;
-    }
+    public void changeDirY(int y){ this.dirY = this.dirY + y; }
 
     @Override
     public boolean turn() {
@@ -69,6 +74,10 @@ public class ControlledRobot implements Robot {
     @Override
     public int getRadius(){ return this.radius;}
 
+    public void stop(){
+        this.dirX = 0;
+        this.dirY = 0;
+    }
     public void printPoition(){
         System.out.println("Robot at:" + this.row + " " + this.col);
     }

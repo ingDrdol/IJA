@@ -53,4 +53,19 @@ public class Room implements Area {
     public int getCols(){
         return (int)this.anchor.getWidth();
     }
+
+    @Override
+    public boolean robotCollision(Robot r, Position p){
+        for(Obstacle item : items){
+            if (item.containsPosition(r.getPosition())
+                || item.colision(r)) {
+                return true;
+            }
+        }
+        if (p.getCol() - r.getRadius() < 0 || p.getRow() - r.getRadius() < 0)
+            return true;
+
+        return p.getRow() + r.getRadius() > this.getCols()
+                || p.getCol() + r.getRadius() > this.getRows();
+    }
 }
