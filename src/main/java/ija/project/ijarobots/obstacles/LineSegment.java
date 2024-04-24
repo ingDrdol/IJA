@@ -5,7 +5,7 @@ import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
 
 public class LineSegment implements Obstacle {
-    private Position start, end;
+    private final Position start, end;
     public LineSegment(Position start, Position end) {
         this.start = start;
         this.end = end;

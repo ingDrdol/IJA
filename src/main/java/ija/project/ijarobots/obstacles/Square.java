@@ -5,6 +5,7 @@ import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
 import javafx.geometry.Pos;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,11 @@ public class Square extends BaseObstacle{
             return col > y && col < y + a;
         }
         return false;
+    }
+
+    @Override
+    public Shape getShape() {
+        return null;
     }
 
     @Override

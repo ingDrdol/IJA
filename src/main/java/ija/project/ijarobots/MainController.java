@@ -42,16 +42,16 @@ public class MainController implements Initializable {
             for(Character c: keys){
                 switch (c){
                     case 'w':
-                        x = playerPos.getRow() - 5;
+                        x = x - 5;
                         break;
                     case 's':
-                        x = playerPos.getRow() + 5;
+                        x = x + 5;
                         break;
                     case 'a':
-                        y = playerPos.getCol() - 5;
+                        y = y - 5;
                         break;
                     case 'd':
-                        y = playerPos.getCol() + 5;
+                        y = y + 5;
                         break;
                 }
             }
