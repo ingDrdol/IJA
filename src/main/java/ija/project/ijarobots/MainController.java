@@ -33,7 +33,6 @@ public class MainController implements Initializable {
     @FXML
     GridPane frame;
 
-
     Room room;
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {

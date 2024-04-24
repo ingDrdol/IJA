@@ -4,4 +4,5 @@ public interface Robot extends Obstacle{
     boolean move();
     boolean turn();
     Position getPosition();
+    int getRadius();
 }

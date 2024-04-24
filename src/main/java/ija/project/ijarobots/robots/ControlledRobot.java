@@ -13,10 +13,12 @@ public class ControlledRobot implements Robot {
     private int col = 0;
     private int dirX = 0;
     private int dirY = 0;
+    private int radius = 0;
 
-    public ControlledRobot(int r, int c, Area a){
+    public ControlledRobot(int r, int c, int size, Area a){
         this.row = r;
         this.col = c;
+        this.radius = size;
         this.ar = a;
     }
     public ControlledRobot(Area a){
@@ -28,8 +30,8 @@ public class ControlledRobot implements Robot {
     }
 
     @Override
-    public boolean colision(Obstacle o) {
-        return o.containsPosition(new Position(this.row, this.col));
+    public boolean colision(Robot r) {
+        return r.containsPosition(new Position(this.row, this.col));
     }
 
     private boolean canMove(){
@@ -64,7 +66,8 @@ public class ControlledRobot implements Robot {
         return new Position(this.row, this.col);
     }
 
-
+    @Override
+    public int getRadius(){ return this.radius;}
 
     public void printPoition(){
         System.out.println("Robot at:" + this.row + " " + this.col);

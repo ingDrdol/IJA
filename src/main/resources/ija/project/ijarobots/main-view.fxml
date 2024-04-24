@@ -13,8 +13,7 @@
 <?import javafx.scene.shape.Circle?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
           fx:controller="ija.project.ijarobots.MainController"
-          fx:id="frame"
-          minWidth="-Infinity" minHeight="-Infinity">
+          fx:id="frame">
   <columnConstraints>
     <ColumnConstraints percentWidth="100"/>
   </columnConstraints>
@@ -35,7 +34,7 @@
     <Circle fx:id="player" style="-fx-background-color: blue" radius="20" rotate="0"/>
   </AnchorPane>
 
-  <Button fx:id="testBtn" text="chngColor" onAction="#changeBackground"
+  <Button fx:id="testBtn" text="displaySize" onAction="#changeBackground"
             GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
 
   <Label fx:id="label" text="chngColor"

@@ -2,8 +2,13 @@ package ija.project.ijarobots.obstacles;
 
 import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.common.Robot;
+import javafx.geometry.Pos;
+import javafx.scene.shape.Line;
 
-public class Square implements Obstacle {
+import java.util.ArrayList;
+
+public class Square extends BaseObstacle{
     private int x;
     private int y;
     private int a;
@@ -24,7 +29,17 @@ public class Square implements Obstacle {
     }
 
     @Override
-    public boolean colision(Obstacle o) {
-        return false;
+    protected ArrayList<LineSegment> getLines() {
+        ArrayList<LineSegment> lines = new ArrayList<>();
+        Position A = new Position(x,y);
+        Position B = new Position(x+a,y);
+        Position C = new Position(x,y+a);
+        Position D = new Position(x+a,y+a);
+
+        lines.add(new LineSegment(A, B));
+        lines.add(new LineSegment(B, C));
+        lines.add(new LineSegment(C, D));
+        lines.add(new LineSegment(D, A));
+        return lines;
     }
 }
