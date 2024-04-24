@@ -1,6 +1,7 @@
 package ija.project.ijarobots;
 
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.obstacles.Square;
 import ija.project.ijarobots.robots.ControlledRobot;
 import ija.project.ijarobots.room.Room;
 import javafx.animation.KeyFrame;
@@ -65,6 +66,8 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
         playerModel = new ControlledRobot(50, 50, 20, room);
+        Square obstacle = new Square(90, 90, 30);
+        room.addObstacle(obstacle);
         player.setFill(Color.BLUE);
         player.setRadius(playerModel.getRadius());
         keyListenerSetUp();

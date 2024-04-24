@@ -26,7 +26,7 @@
   <AnchorPane GridPane.fillHeight="true" GridPane.fillWidth="true"
               GridPane.columnIndex="0"
               GridPane.rowIndex="0"
-              style="-fx-background-color: black"
+              style="-fx-background-color: red"
               fx:id="robotPlayground">
     <padding>
       <Insets top="0" bottom="0" left="0" right="0"/>

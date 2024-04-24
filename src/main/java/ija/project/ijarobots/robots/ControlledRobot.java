@@ -52,6 +52,7 @@ public class ControlledRobot implements Robot {
             this.col += this.dirY;
             return true;
         }
+        this.stop();
         return false;
     }
 
