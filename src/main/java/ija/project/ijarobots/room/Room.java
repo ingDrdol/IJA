@@ -25,6 +25,7 @@ public class Room implements Area {
 
     public void addObstacle(Obstacle o){
         items.add(o);
+        anchor.getChildren().add(o.getShape());
     }
 
     @Override

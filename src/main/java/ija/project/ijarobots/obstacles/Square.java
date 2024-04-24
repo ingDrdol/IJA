@@ -5,6 +5,7 @@ import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
 import javafx.geometry.Pos;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class Square extends BaseObstacle{
 
     @Override
     public Shape getShape() {
-        return null;
+        return new Rectangle(this.x, this.y, this.a, this.a);
     }
 
     @Override
