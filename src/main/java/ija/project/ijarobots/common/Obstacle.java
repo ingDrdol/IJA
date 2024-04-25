@@ -1,6 +1,9 @@
 package ija.project.ijarobots.common;
 
+import javafx.scene.shape.Shape;
+
 public interface Obstacle {
     boolean containsPosition(Position p);
-    boolean colision(Obstacle o);
+    boolean colision(Robot r, Position p);
+    Shape getShape();
 }

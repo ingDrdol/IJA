@@ -1,6 +1,8 @@
 package ija.project.ijarobots;
 
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.obstacles.Square;
+import ija.project.ijarobots.robots.ControlledRobot;
 import ija.project.ijarobots.room.Room;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -9,10 +11,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
@@ -32,41 +36,27 @@ public class MainController implements Initializable {
     Circle player;
     @FXML
     GridPane frame;
-
-
+    ControlledRobot playerModel;
     Room room;
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            int x = playerPos.getRow(), y = playerPos.getCol();
-            for(Character c: keys){
-                switch (c){
-                    case 'w':
-                        x = playerPos.getRow() - 5;
-                        break;
-                    case 's':
-                        x = playerPos.getRow() + 5;
-                        break;
-                    case 'a':
-                        y = playerPos.getCol() - 5;
-                        break;
-                    case 'd':
-                        y = playerPos.getCol() + 5;
-                        break;
+            for (var key: keys){
+                switch (key){
+                    case 'w' -> playerModel.speedUp();
+                    case 's' -> playerModel.slowDown();
+                    case 'a' -> playerModel.turn((int)(3 * playerModel.getSpeed()));
+                    case 'd' -> playerModel.turn((int)(-3 * playerModel.getSpeed()));
                 }
             }
-
-            if (x + (int)player.getRadius() > room.getRows()){
-                x = room.getRows() - (int)player.getRadius();
-            }
-            if (y + (int)player.getRadius() > room.getCols()){
-                y = room.getCols() - (int)player.getRadius();
-            }
-
-            playerPos = new Position(x, y);
-            player.setLayoutX(y);
-            player.setLayoutY(x);
+            playerModel.move();
+            playerModel.stop();
+            Position p = playerModel.getPosition();
+            player.setLayoutX(p.getRow());
+            player.setLayoutY(p.getCol());
+            player.setRotate(playerModel.getAngle()*(-1) + (double)180);
+            label.setText(String.format("speed: %f", playerModel.getSpeed()));
         }
     }));
 
@@ -78,7 +68,15 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
-        playerPos = new Position(50, 50);
+        playerModel = new ControlledRobot(50, 50, 20, room);
+        Square obstacle = new Square(90, 90, 30);
+        room.addObstacle(obstacle);
+
+        Image skin = new Image("file:data/playerBackground.jpg");
+        player.setFill(new ImagePattern(skin));
+        obstacle = new Square( 200, 60, 50);
+        room.addObstacle(obstacle);
+        player.setRadius(playerModel.getRadius());
         keyListenerSetUp();
         simulation.setCycleCount(Timeline.INDEFINITE);
         simulation.play();

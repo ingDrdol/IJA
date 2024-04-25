@@ -2,6 +2,9 @@ package ija.project.ijarobots.common;
 
 public interface Robot extends Obstacle{
     boolean move();
-    boolean turn();
+    void turn(int degrees);
     Position getPosition();
+    int getRadius();
+    int getAngle();
+    void stop();
 }
