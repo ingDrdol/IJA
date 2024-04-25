@@ -1,21 +1,37 @@
 package ija.project.ijarobots.robots;
 
+import ija.project.ijarobots.common.Area;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
+import javafx.geometry.Pos;
 import javafx.scene.shape.Shape;
+
+import java.util.ArrayList;
 
 public abstract class BaseRobot implements Robot {
     protected int angle = 0, radius;
     protected double row, col;
     protected double dirX = 0, dirY = 0, speed = 1;
-    protected BaseRobot(int r, int c, int size){
+
+    private final Area ar;
+    private final ArrayList<HistoryRecord> history;
+
+    protected BaseRobot(int r, int c, int size, Area a){
         this.row = r;
         this.col = c;
         this.radius = size;
+        this.ar = a;
+
+        this.history = new ArrayList<>();
+        this.history.add(new HistoryRecord(new Position(r, c), this.angle, this.speed));
     }
     @Override
     public boolean colision(Robot r, Position p) {
         return !(this.getPosition().distance(p) > r.getRadius() + this.getRadius());
+    }
+
+    protected boolean canMove(Position dest){
+        return !ar.robotCollision(this, dest);
     }
 
     @Override
@@ -62,4 +78,25 @@ public abstract class BaseRobot implements Robot {
         return this.speed;
     }
 
+    public void savePosition(){
+        this.history.add(new HistoryRecord(new Position(this.row, this.col), this.angle, this.speed));
+    }
+
+    public void reverseMove(){
+        if (!this.history.isEmpty()){
+            HistoryRecord prev = this.history.get(this.history.size() - 1);
+            this.history.remove(this.history.size() - 1);
+            this.col = prev.p().getCol();
+            this.row = prev.p().getRow();
+            this.speed = prev.speed();
+            this.angle = prev.angle();
+        }
+    }
+
 }
+
+record HistoryRecord (
+        Position p,
+        int angle,
+        double speed
+){}
