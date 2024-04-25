@@ -22,8 +22,8 @@ public class Square extends BaseObstacle{
     }
     @Override
     public boolean containsPosition(Position p) {
-        int row = p.getRow();
-        int col = p.getCol();
+        double row = p.getRow();
+        double col = p.getCol();
         if (row > x && row < x+a){
             return col > y && col < y + a;
         }

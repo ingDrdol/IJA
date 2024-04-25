@@ -11,10 +11,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
@@ -42,10 +44,10 @@ public class MainController implements Initializable {
         public void handle(ActionEvent actionEvent) {
             for (var key: keys){
                 switch (key){
-                    case 'w' -> playerModel.changeDirY(-1);
-                    case 's' -> playerModel.changeDirY(1);
-                    case 'a' -> playerModel.changeDirX(-1);
-                    case 'd' -> playerModel.changeDirX(1);
+                    case 'w' -> playerModel.speedUp();
+                    case 's' -> playerModel.slowDown();
+                    case 'a' -> playerModel.turn((int)(3 * playerModel.getSpeed()));
+                    case 'd' -> playerModel.turn((int)(-3 * playerModel.getSpeed()));
                 }
             }
             playerModel.move();
@@ -53,7 +55,8 @@ public class MainController implements Initializable {
             Position p = playerModel.getPosition();
             player.setLayoutX(p.getRow());
             player.setLayoutY(p.getCol());
-            label.setText(String.format("rows: %d, cols: %d| %d, %d",room.getRows(), room.getCols(), p.getRow(), p.getCol()));
+            player.setRotate(playerModel.getAngle()*(-1) + (double)180);
+            label.setText(String.format("speed: %f", playerModel.getSpeed()));
         }
     }));
 
@@ -69,9 +72,10 @@ public class MainController implements Initializable {
         Square obstacle = new Square(90, 90, 30);
         room.addObstacle(obstacle);
 
+        Image skin = new Image("file:data/playerBackground.jpg");
+        player.setFill(new ImagePattern(skin));
         obstacle = new Square( 200, 60, 50);
         room.addObstacle(obstacle);
-        player.setFill(Color.BLUE);
         player.setRadius(playerModel.getRadius());
         keyListenerSetUp();
         simulation.setCycleCount(Timeline.INDEFINITE);
