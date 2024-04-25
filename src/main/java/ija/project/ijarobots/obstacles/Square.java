@@ -40,8 +40,8 @@ public class Square extends BaseObstacle{
         ArrayList<LineSegment> lines = new ArrayList<>();
         Position A = new Position(x,y);
         Position B = new Position(x+a,y);
-        Position C = new Position(x,y+a);
-        Position D = new Position(x+a,y+a);
+        Position C = new Position(x+a,y+a);
+        Position D = new Position(x,y+a);
 
         lines.add(new LineSegment(A, B));
         lines.add(new LineSegment(B, C));

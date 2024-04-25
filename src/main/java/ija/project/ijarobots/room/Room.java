@@ -25,7 +25,7 @@ public class Room implements Area {
 
     public void addObstacle(Obstacle o){
         items.add(o);
-        this.anchor.getChildren().add(o.getShape());
+        anchor.getChildren().add(o.getShape());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Room implements Area {
     public boolean robotCollision(Robot r, Position p){
         for(Obstacle item : items){
             if (item.containsPosition(r.getPosition())
-                || item.colision(r)) {
+                || item.colision(r, p)) {
                 return true;
             }
         }

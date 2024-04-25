@@ -42,10 +42,10 @@ public class MainController implements Initializable {
         public void handle(ActionEvent actionEvent) {
             for (var key: keys){
                 switch (key){
-                    case 'w' -> playerModel.changeDirY(-5);
-                    case 's' -> playerModel.changeDirY(5);
-                    case 'a' -> playerModel.changeDirX(-5);
-                    case 'd' -> playerModel.changeDirX(5);
+                    case 'w' -> playerModel.changeDirY(-1);
+                    case 's' -> playerModel.changeDirY(1);
+                    case 'a' -> playerModel.changeDirX(-1);
+                    case 'd' -> playerModel.changeDirX(1);
                 }
             }
             playerModel.move();
@@ -67,6 +67,9 @@ public class MainController implements Initializable {
         room = new Room(robotPlayground);
         playerModel = new ControlledRobot(50, 50, 20, room);
         Square obstacle = new Square(90, 90, 30);
+        room.addObstacle(obstacle);
+
+        obstacle = new Square( 200, 60, 50);
         room.addObstacle(obstacle);
         player.setFill(Color.BLUE);
         player.setRadius(playerModel.getRadius());

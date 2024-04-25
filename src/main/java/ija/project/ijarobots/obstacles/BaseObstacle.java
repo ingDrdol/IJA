@@ -11,13 +11,12 @@ public abstract class BaseObstacle implements Obstacle {
     protected abstract ArrayList<LineSegment> getLines();
 
     @Override
-    public boolean colision(Robot r) {
-        Position center = r.getPosition();
-        Circle robot = new Circle();
-        robot.setCenterX(center.getRow());
-        robot.setCenterY(center.getCol());
-        robot.setRadius(r.getRadius());
-
-        return robot.intersects(this.getShape().getLayoutBounds());
+    public boolean colision(Robot r, Position p){
+        ArrayList<LineSegment> lines = getLines();
+        for (LineSegment line : lines) {
+            if(line.colision(r, p))
+                return true;
+        }
+        return false;
     }
 }
