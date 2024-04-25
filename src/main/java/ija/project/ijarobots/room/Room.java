@@ -6,7 +6,9 @@ import ija.project.ijarobots.common.Area;
 import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
+import ija.project.ijarobots.robots.BaseRobot;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,10 +79,32 @@ public class Room implements Area {
                 return true;
             }
         }
+
+        for(Robot robot : robots){
+            if (robot.hashCode() != r.hashCode()){
+                if(robot.containsPosition(r.getPosition())
+                        || robot.colision(r, p)) {
+                    return true;
+                }
+            }
+        }
+
         if (p.getCol() - r.getRadius() < 0 || p.getRow() - r.getRadius() < 0)
             return true;
 
         return p.getRow() + r.getRadius() > this.getCols()
                 || p.getCol() + r.getRadius() > this.getRows();
+    }
+
+    public void moveRobots(){
+        for(Robot robot : robots) {
+            robot.move();
+
+            Shape robotShape = robot.getShape();
+            Position p = robot.getPosition();
+            robotShape.setLayoutX(p.getRow());
+            robotShape.setLayoutY(p.getCol());
+            robotShape.setRotate(robot.getAngle()*(-1) + (double)180);
+        }
     }
 }

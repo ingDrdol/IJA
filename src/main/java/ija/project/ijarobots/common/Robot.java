@@ -10,5 +10,7 @@ public interface Robot extends Obstacle{
     int getAngle();
     void stop();
     Shape getShape();
-    public String getParams();
+    String getParams();
+    void setMoving(boolean move);
+    boolean canMove(Position dest);
 }

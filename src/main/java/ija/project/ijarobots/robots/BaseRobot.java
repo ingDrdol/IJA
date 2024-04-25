@@ -15,6 +15,7 @@ public abstract class BaseRobot implements Robot {
 
     private final Area ar;
     private final ArrayList<HistoryRecord> history;
+    protected boolean canMove = true;
 
     protected BaseRobot(int r, int c, int size, Area a){
         this.row = r;
@@ -30,7 +31,13 @@ public abstract class BaseRobot implements Robot {
         return !(this.getPosition().distance(p) > r.getRadius() + this.getRadius());
     }
 
-    protected boolean canMove(Position dest){
+    @Override
+    public void setMoving(boolean move){
+        this.canMove = move;
+    }
+
+    @Override
+    public boolean canMove(Position dest){
         return !ar.robotCollision(this, dest);
     }
 
@@ -60,12 +67,6 @@ public abstract class BaseRobot implements Robot {
 
     @Override
     public int getAngle() {return this.angle;}
-
-    public void changeDirX(int x){
-        this.dirX = this.dirX + x;
-    }
-
-    public void changeDirY(int y){ this.dirY = this.dirY + y; }
 
     public void getDirection(){
         double sin = Math.sin(Math.toRadians(this.angle));

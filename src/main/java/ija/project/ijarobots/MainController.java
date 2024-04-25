@@ -1,6 +1,7 @@
 package ija.project.ijarobots;
 
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.common.Robot;
 import ija.project.ijarobots.obstacles.Square;
 import ija.project.ijarobots.robots.AutomatedRobot;
 import ija.project.ijarobots.robots.ControlledRobot;
@@ -35,13 +36,8 @@ public class MainController implements Initializable {
     @FXML
     Label label;
     @FXML
-    Circle player;
-    @FXML
-    Circle airob;
-    @FXML
     GridPane frame;
     ControlledRobot playerModel;
-    AutomatedRobot airobot;
     Room room;
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
@@ -49,10 +45,6 @@ public class MainController implements Initializable {
         public void handle(ActionEvent actionEvent) {
             if (reverse){
                 playerModel.reverseMove();
-                Position p = playerModel.getPosition();
-                player.setLayoutX(p.getRow());
-                player.setLayoutY(p.getCol());
-                player.setRotate(playerModel.getAngle()*(-1) + (double)180);
                 return;
             }
             for (var key: keys){
@@ -63,17 +55,8 @@ public class MainController implements Initializable {
                     case 'd' -> playerModel.turn((int)(-3 * playerModel.getSpeed()));
                 }
             }
-            airobot.move();
-            Position p = airobot.getPosition();
-            airob.setLayoutX(p.getRow());
-            airob.setLayoutY(p.getCol());
-            airob.setRotate(airobot.getAngle()*(-1) + (double)180);
 
-            playerModel.move();
-            p = playerModel.getPosition();
-            player.setLayoutX(p.getRow());
-            player.setLayoutY(p.getCol());
-            player.setRotate(playerModel.getAngle()*(-1) + (double)180);
+            room.moveRobots();
             label.setText(String.format("speed: %f", playerModel.getSpeed()));
         }
     }));
@@ -86,16 +69,17 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
-        airobot = new AutomatedRobot(100, 30, 20, room);
-        playerModel = new ControlledRobot(50, 50, 20, room);
+        playerModel = new ControlledRobot(25, 25, 20, room);
+        room.addRobot(playerModel);
+        Robot robot = new AutomatedRobot(100, 30, 20, room);
+       // room.addRobot(robot);
         Square obstacle = new Square(90, 90, 30);
         room.addObstacle(obstacle);
         Image skin = new Image("file:data/playerBackground.jpg");
-        player.setFill(new ImagePattern(skin));
-        airob.setFill(new ImagePattern(skin));
+        robot = new AutomatedRobot(60, 120, 20, room);
+       // room.addRobot(robot);
         obstacle = new Square( 200, 60, 50);
         room.addObstacle(obstacle);
-        player.setRadius(playerModel.getRadius());
         keyListenerSetUp();
         simulation.setCycleCount(Timeline.INDEFINITE);
         simulation.play();

@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class AutomatedRobot extends BaseRobot{
     private final Random rand = new Random();
+    private Circle shape;
     private int size;
     private boolean turning = false;
     private int turnAngle = 0;
@@ -18,7 +19,11 @@ public class AutomatedRobot extends BaseRobot{
     public AutomatedRobot(int r, int c, int size, Area a) {
         super(r, c, (size + 5), a);
         this.size = size;
-        this.speed = 2;
+        this.speed = 0;
+
+        this.shape = new Circle(this.col, this.row, this.size);
+        Image image = new Image("file:data/playerBackground.jpg");
+        shape.setFill(new ImagePattern(image));
     }
 
     @Override
@@ -47,16 +52,9 @@ public class AutomatedRobot extends BaseRobot{
         return true;
     }
 
-    public Shape getShape(String skin) {
-        Shape shape = new Circle(this.row, this.col, this.size);
-        Image image = new Image(skin);
-        shape.setFill(new ImagePattern(image));
-        return shape;
-    }
-
     @Override
     public Shape getShape() {
-        return this.getShape("file:data/playerBackground.jpg");
+        return this.shape;
     }
 
     public String getParams(){
