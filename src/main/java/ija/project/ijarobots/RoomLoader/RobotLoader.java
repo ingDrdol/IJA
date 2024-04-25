@@ -3,6 +3,7 @@ package ija.project.ijarobots.RoomLoader;
 import ija.project.ijarobots.common.Area;
 import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Robot;
+import ija.project.ijarobots.room.Room;
 import ija.project.ijarobots.obstacles.Square;
 import ija.project.ijarobots.robots.BaseRobot;
 import ija.project.ijarobots.robots.ControlledRobot;
@@ -52,8 +53,8 @@ public class RobotLoader {
         return robots;
     }
 
-    public void exportRobots(String filePath, Area area){
-        List<Robot> robots = area.getRobots();
+    public void exportRobots(String filePath, Room room){
+        List<Robot> robots = room.getRobots();
         try {
             FileWriter writer = new FileWriter(filePath, true);
             BufferedWriter buffer = new BufferedWriter(writer);
