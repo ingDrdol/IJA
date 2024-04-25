@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public abstract class BaseRobot implements Robot {
     protected int angle = 0, radius;
     protected double row, col;
-    protected double dirX = 0, dirY = 0, speed = 1;
+    protected double dirX = 0, dirY = 0, speed = 0;
 
-    private final Area ar;
+    protected final Area ar;
     private final ArrayList<HistoryRecord> history;
 
     protected BaseRobot(int r, int c, int size, Area a){
@@ -82,6 +82,7 @@ public abstract class BaseRobot implements Robot {
         this.history.add(new HistoryRecord(new Position(this.row, this.col), this.angle, this.speed));
     }
 
+    @Override
     public void reverseMove(){
         if (!this.history.isEmpty()){
             HistoryRecord prev = this.history.get(this.history.size() - 1);

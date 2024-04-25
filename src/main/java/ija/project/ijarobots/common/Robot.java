@@ -7,4 +7,5 @@ public interface Robot extends Obstacle{
     int getRadius();
     int getAngle();
     void stop();
+    void reverseMove();
 }

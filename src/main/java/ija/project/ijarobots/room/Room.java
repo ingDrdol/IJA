@@ -7,22 +7,29 @@ import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 
 public class Room implements Area {
     AnchorPane anchor;
-
     private ArrayList<Obstacle> items;
+    private ArrayList<Robot> robots;
     public Room(AnchorPane anchor){
         this.anchor = anchor;
         this.items = new ArrayList<>();
+        this.robots = new ArrayList<>();
     }
     @Override
-    public boolean addRobot(Robot r) {
-        return false;
+    public void addRobot(Robot r) {
+        this.robots.add(r);
+        anchor.getChildren().add(r.getShape());
     }
 
+    public ArrayList<Robot> getRobots() {
+        return this.robots;
+    }
     public void addObstacle(Obstacle o){
         items.add(o);
         anchor.getChildren().add(o.getShape());
@@ -63,10 +70,23 @@ public class Room implements Area {
                 return true;
             }
         }
+
+        for(Robot robot : robots){
+            if (robot.containsPosition(r.getPosition())
+                    || robot.colision(r, p)) {
+                if(r.hashCode() != robot.hashCode())
+                    return true;
+            }
+        }
         if (p.getCol() - r.getRadius() < 0 || p.getRow() - r.getRadius() < 0)
             return true;
 
-        return p.getRow() + r.getRadius() > this.getCols()
-                || p.getCol() + r.getRadius() > this.getRows();
+        return p.getCol() + r.getRadius() > this.getRows()
+                || p.getRow() + r.getRadius() > this.getCols();
+    }
+
+    public void moveRobots(){
+        for(Robot robot : robots)
+            robot.move();
     }
 }

@@ -1,6 +1,7 @@
 package ija.project.ijarobots;
 
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.common.Robot;
 import ija.project.ijarobots.obstacles.Square;
 import ija.project.ijarobots.robots.AutomatedRobot;
 import ija.project.ijarobots.robots.ControlledRobot;
@@ -35,10 +36,6 @@ public class MainController implements Initializable {
     @FXML
     Label label;
     @FXML
-    Circle player;
-    @FXML
-    Circle airob;
-    @FXML
     GridPane frame;
     ControlledRobot playerModel;
     AutomatedRobot airobot;
@@ -48,11 +45,7 @@ public class MainController implements Initializable {
         @Override
         public void handle(ActionEvent actionEvent) {
             if (reverse){
-                playerModel.reverseMove();
-                Position p = playerModel.getPosition();
-                player.setLayoutX(p.getRow());
-                player.setLayoutY(p.getCol());
-                player.setRotate(playerModel.getAngle()*(-1) + (double)180);
+                reverse();
                 return;
             }
             for (var key: keys){
@@ -63,17 +56,10 @@ public class MainController implements Initializable {
                     case 'd' -> playerModel.turn((int)(-3 * playerModel.getSpeed()));
                 }
             }
-            airobot.move();
-            Position p = airobot.getPosition();
-            airob.setLayoutX(p.getRow());
-            airob.setLayoutY(p.getCol());
-            airob.setRotate(airobot.getAngle()*(-1) + (double)180);
 
-            playerModel.move();
-            p = playerModel.getPosition();
-            player.setLayoutX(p.getRow());
-            player.setLayoutY(p.getCol());
-            player.setRotate(playerModel.getAngle()*(-1) + (double)180);
+
+            room.moveRobots();
+            drawRobots();
             label.setText(String.format("speed: %f", playerModel.getSpeed()));
         }
     }));
@@ -87,16 +73,16 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
         airobot = new AutomatedRobot(100, 30, 20, room);
-        playerModel = new ControlledRobot(50, 50, 20, room);
+        playerModel = new ControlledRobot(20, 20, 20, room);
+        room.addRobot(playerModel);
         Square obstacle = new Square(90, 90, 30);
         room.addObstacle(obstacle);
-        Image skin = new Image("file:data/playerBackground.jpg");
-        player.setFill(new ImagePattern(skin));
-        airob.setFill(new ImagePattern(skin));
+        room.addRobot(airobot);
         obstacle = new Square( 200, 60, 50);
         room.addObstacle(obstacle);
-        player.setRadius(playerModel.getRadius());
         keyListenerSetUp();
+        airobot = new AutomatedRobot(200, 200, 20, room);
+        room.addRobot(airobot);
         simulation.setCycleCount(Timeline.INDEFINITE);
         simulation.play();
     }
@@ -124,13 +110,24 @@ public class MainController implements Initializable {
         });
     }
 
-    private void reverse(){
-        simulation.pause();
-        simulation.setRate(-1);
-        simulation.play();
-    }
     private void addSingle(Character c){
         if (!keys.contains(c))
             keys.add(c);
+    }
+
+    private void drawRobots(){
+        for(Robot robot : room.getRobots()){
+            Position p = robot.getPosition();
+            robot.getShape().setLayoutX(p.getRow());
+            robot.getShape().setLayoutY(p.getCol());
+            robot.getShape().setRotate(robot.getAngle()*(-1) + (double)180);
+        }
+    }
+
+    private void reverse(){
+        for (Robot robot : room.getRobots()){
+            robot.reverseMove();
+        }
+        drawRobots();
     }
 }

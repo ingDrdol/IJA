@@ -14,11 +14,14 @@ public class AutomatedRobot extends BaseRobot{
     private int size;
     private boolean turning = false;
     private int turnAngle = 0;
-
+    private Shape shape;
     public AutomatedRobot(int r, int c, int size, Area a) {
         super(r, c, (size + 5), a);
         this.size = size;
         this.speed = 2;
+        this.shape = new Circle(0, 0, size);
+        Image skin = new Image("file:data/playerBackground.jpg");
+        this.shape.setFill(new ImagePattern(skin));
     }
 
     @Override
@@ -43,15 +46,13 @@ public class AutomatedRobot extends BaseRobot{
                     this.turn(turnAngle);
                 }
             }
+            this.savePosition();
         }
         return true;
     }
 
     public Shape getShape(String skin) {
-        Shape shape = new Circle(this.row, this.col, this.size);
-        Image image = new Image(skin);
-        shape.setFill(new ImagePattern(image));
-        return shape;
+        return this.shape;
     }
 
     @Override
