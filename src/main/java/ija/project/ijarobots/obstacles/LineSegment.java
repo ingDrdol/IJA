@@ -69,4 +69,9 @@ public class LineSegment implements Obstacle {
         return new Line(start.getRow(), start.getCol(), end.getRow(), end.getCol());
     }
 
+    @Override
+    public String getParams() {
+        return null;
+    }
+
 }

@@ -49,4 +49,11 @@ public class ControlledRobot extends BaseRobot {
             this.speed -= 0.1;
     }
 
+    public String getParams(){
+        double x = this.row;
+        double y = this.col;
+        int r = this.radius;
+        return "P" + "," + String.valueOf(x) + "," +  String.valueOf(y) + "," +  String.valueOf(r);
+    }
+
 }

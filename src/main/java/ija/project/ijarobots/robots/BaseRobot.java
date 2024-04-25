@@ -61,5 +61,4 @@ public abstract class BaseRobot implements Robot {
     public double getSpeed(){
         return this.speed;
     }
-
 }

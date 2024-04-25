@@ -6,4 +6,5 @@ public interface Obstacle {
     boolean containsPosition(Position p);
     boolean colision(Robot r, Position p);
     Shape getShape();
+    public String getParams();
 }

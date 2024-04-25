@@ -55,7 +55,7 @@ public class MainController implements Initializable {
             Position p = playerModel.getPosition();
             player.setLayoutX(p.getRow());
             player.setLayoutY(p.getCol());
-            player.setRotate(playerModel.getAngle()*(-1) + (double)180);
+            player.setRotate(playerModel.getAngle()*(-1) + (double)90);
             label.setText(String.format("speed: %f", playerModel.getSpeed()));
         }
     }));
@@ -68,13 +68,13 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
-        playerModel = new ControlledRobot(50, 50, 20, room);
-        Square obstacle = new Square(90, 90, 30);
+        playerModel = new ControlledRobot(50, 50, 50, room);
+        Square obstacle = new Square(190, 190, 30);
         room.addObstacle(obstacle);
 
-        Image skin = new Image("file:data/playerBackground.jpg");
+        Image skin = new Image("file:data/playerRobotSkin.jpg");
         player.setFill(new ImagePattern(skin));
-        obstacle = new Square( 200, 60, 50);
+        obstacle = new Square( 200, 260, 50);
         room.addObstacle(obstacle);
         player.setRadius(playerModel.getRadius());
         keyListenerSetUp();

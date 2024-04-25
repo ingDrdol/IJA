@@ -9,18 +9,22 @@ import ija.project.ijarobots.common.Robot;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Room implements Area {
     AnchorPane anchor;
 
     private ArrayList<Obstacle> items;
+    private ArrayList<Robot> robots;
     public Room(AnchorPane anchor){
         this.anchor = anchor;
         this.items = new ArrayList<>();
+        this.robots = new ArrayList<>();
     }
     @Override
-    public boolean addRobot(Robot r) {
-        return false;
+    public void addRobot(Robot r) {
+        robots.add(r);
+        anchor.getChildren().add(r.getShape());
     }
 
     public void addObstacle(Obstacle o){
@@ -45,6 +49,16 @@ public class Room implements Area {
         if (p.getCol() < 0 || p. getRow() < 0)
             return false;
         return p.getCol() <= this.getCols() && p.getRow() <= this.getRows();
+    }
+
+    @Override
+    public List<Obstacle> getObstacles() {
+        return items;
+    }
+
+    @Override
+    public List<Robot> getRobots() {
+        return robots;
     }
 
     public int getRows(){
