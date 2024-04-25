@@ -13,17 +13,12 @@ public class ControlledRobot extends BaseRobot {
     Area ar;
 
     public ControlledRobot(int r, int c, int size, Area a){
-        super(r, c, size);
-        this.ar = a;
+        super(r, c, size, a);
     }
 
     @Override
     public Shape getShape() {
         return null;
-    }
-
-    private boolean canMove(Position dest){
-        return !ar.robotCollision(this, dest);
     }
 
     @Override
@@ -33,6 +28,7 @@ public class ControlledRobot extends BaseRobot {
             Position dest = new Position(this.row + this.dirX, this.col + this.dirY);
             if (!this.canMove(dest))
                 return false;
+            this.savePosition();
             this.row += this.dirX;
             this.col += this.dirY;
         }
