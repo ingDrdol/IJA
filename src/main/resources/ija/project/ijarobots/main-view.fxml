@@ -28,10 +28,8 @@
               GridPane.rowIndex="0"
               style="-fx-background-color: red"
               fx:id="robotPlayground">
-    <padding>
-      <Insets top="0" bottom="0" left="0" right="0"/>
-    </padding>
-    <Circle fx:id="player" radius="20" rotate="0"/>
+
+    <children></children>
   </AnchorPane>
 
   <Button fx:id="testBtn" text="displaySize" onAction="#changeBackground"

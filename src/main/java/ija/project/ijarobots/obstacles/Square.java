@@ -20,6 +20,12 @@ public class Square extends BaseObstacle{
         this.y = yCor;
         this.a = side;
     }
+    public String getParams(){
+        int x = this.x;
+        int y = this.y;
+        int a = this.a;
+        return "S" + "," + String.valueOf(x) + "," +  String.valueOf(y) + "," +  String.valueOf(a);
+    }
     @Override
     public boolean containsPosition(Position p) {
         double row = p.getRow();
@@ -49,4 +55,6 @@ public class Square extends BaseObstacle{
         lines.add(new LineSegment(D, A));
         return lines;
     }
+
+
 }
