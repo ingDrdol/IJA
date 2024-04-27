@@ -6,24 +6,24 @@ import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 public class ControlledRobot extends BaseRobot {
-
-    Area ar;
-
+    private Circle shape;
     public ControlledRobot(int r, int c, int size, Area a){
-        super(r, c, size);
-        this.ar = a;
+        super(r, c, size, a);
+        this.shape = new Circle(0, 0, size);
+        this.radius = size;
+        Image skin = new Image("file:data/playerBackground.jpg");
+        this.shape.setFill(new ImagePattern(skin));
     }
 
     @Override
     public Shape getShape() {
-        return null;
-    }
-
-    private boolean canMove(Position dest){
-        return !ar.robotCollision(this, dest);
+        return this.shape;
     }
 
     @Override
@@ -33,6 +33,7 @@ public class ControlledRobot extends BaseRobot {
             Position dest = new Position(this.row + this.dirX, this.col + this.dirY);
             if (!this.canMove(dest))
                 return false;
+            this.savePosition();
             this.row += this.dirX;
             this.col += this.dirY;
         }
