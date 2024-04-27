@@ -17,7 +17,7 @@ public class ControlledRobot extends BaseRobot {
         super(r, c, size, a);
         this.shape = new Circle(0, 0, size);
         this.radius = size;
-        Image skin = new Image("file:data/playerBackground.jpg");
+        Image skin = new Image("file:data/playerRobotSkin.jpg");
         this.shape.setFill(new ImagePattern(skin));
     }
 
@@ -50,11 +50,11 @@ public class ControlledRobot extends BaseRobot {
             this.speed -= 0.1;
     }
 
+    @Override
     public String getParams(){
         double x = this.row;
         double y = this.col;
         int r = this.radius;
         return "P" + "," + String.valueOf(x) + "," +  String.valueOf(y) + "," +  String.valueOf(r);
     }
-
 }

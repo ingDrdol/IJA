@@ -60,6 +60,7 @@ public class AutomatedRobot extends BaseRobot{
         return this.getShape("file:data/playerBackground.jpg");
     }
 
+    @Override
     public String getParams(){
         double x = this.row;
         double y = this.col;

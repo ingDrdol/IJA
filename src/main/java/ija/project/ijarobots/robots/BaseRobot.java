@@ -94,6 +94,11 @@ public abstract class BaseRobot implements Robot {
         }
     }
 
+    @Override
+    public String getParams(){
+        return null;
+    }
+
 }
 
 record HistoryRecord (

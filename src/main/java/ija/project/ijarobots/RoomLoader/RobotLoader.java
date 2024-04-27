@@ -24,7 +24,7 @@ public class RobotLoader {
 
     public List<BaseRobot> loadRobots(String filePath, Area area){
         List<List<String>> Atributes = new ArrayList<>();
-        List<BaseRobot> robots = new ArrayList<BaseRobot>();
+        List<BaseRobot> robots = new ArrayList<>();
 
         try {
             BufferedReader buffer = new BufferedReader(new FileReader(filePath));
@@ -47,7 +47,7 @@ public class RobotLoader {
                 int cordX = Integer.parseInt(robot.get(1));
                 int cordY = Integer.parseInt(robot.get(2));
                 int size = Integer.parseInt(robot.get(3));
-                robots.add(new AutomatedRobot(cordX, cordY, size));
+                robots.add(new AutomatedRobot(cordX, cordY, size, area));
             }
         }
         return robots;

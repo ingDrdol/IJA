@@ -11,6 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Room implements Area {
     AnchorPane anchor;
@@ -52,6 +53,11 @@ public class Room implements Area {
         if (p.getCol() < 0 || p. getRow() < 0)
             return false;
         return p.getCol() <= this.getCols() && p.getRow() <= this.getRows();
+    }
+
+    @Override
+    public List<Obstacle> getObstacles() {
+        return null;
     }
 
     public int getRows(){
