@@ -38,9 +38,10 @@ public class MainController implements Initializable {
     @FXML
     AnchorPane robotPlayground;
     @FXML
+    Label label;
+    @FXML
     GridPane frame;
     ControlledRobot playerModel;
-    AutomatedRobot airobot;
     Room room;
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
@@ -63,6 +64,7 @@ public class MainController implements Initializable {
 
             room.moveRobots();
             drawRobots();
+            label.setText(String.format("speed: %.1f", playerModel.getSpeed()));
         }
     }));
 
