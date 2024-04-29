@@ -22,9 +22,9 @@ public class RobotLoader {
 
     }
 
-    public List<BaseRobot> loadRobots(String filePath, Area area){
+    public ArrayList<Robot> loadRobots(String filePath, Area area){
         List<List<String>> Atributes = new ArrayList<>();
-        List<BaseRobot> robots = new ArrayList<>();
+        ArrayList<Robot> robots = new ArrayList<>();
 
         try {
             BufferedReader buffer = new BufferedReader(new FileReader(filePath));

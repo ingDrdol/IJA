@@ -34,19 +34,14 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     ArrayList<Character> keys = new ArrayList<>();
-    Position playerPos;
     boolean reverse = false;
     @FXML
     AnchorPane robotPlayground;
-    @FXML
-    Label label;
     @FXML
     GridPane frame;
     ControlledRobot playerModel;
     AutomatedRobot airobot;
     Room room;
-    public List<Obstacle> obstacles = new ArrayList<>();
-    public List<BaseRobot> robots = new ArrayList<>();
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
         @Override
@@ -55,26 +50,21 @@ public class MainController implements Initializable {
                 reverse();
                 return;
             }
-            for (var key: keys){
-                switch (key){
-                    case 'w' -> playerModel.speedUp();
-                    case 's' -> playerModel.slowDown();
-                    case 'a' -> playerModel.turn((int)(3 * playerModel.getSpeed()));
-                    case 'd' -> playerModel.turn((int)(-3 * playerModel.getSpeed()));
+            if (playerModel != null){
+                for (var key : keys) {
+                    switch (key) {
+                        case 'w' -> playerModel.speedUp();
+                        case 's' -> playerModel.slowDown();
+                        case 'a' -> playerModel.turn((int) (3 * playerModel.getSpeed()));
+                        case 'd' -> playerModel.turn((int) (-3 * playerModel.getSpeed()));
+                    }
                 }
             }
 
-
             room.moveRobots();
             drawRobots();
-            label.setText(String.format("speed: %f", playerModel.getSpeed()));
         }
     }));
-
-    @FXML
-    public void changeBackground(){
-        label.setText(String.format("rows: %d, cols: %d", room.getRows(), room.getCols()));
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,19 +74,12 @@ public class MainController implements Initializable {
         ObstacleLoader obstacleloader = new ObstacleLoader();
         RobotLoader robotloader = new RobotLoader();
 
-        this.obstacles = obstacleloader.loadObstacles(filePath);
-        for (Obstacle obstacle : obstacles){
-            room.addObstacle(obstacle);
-        }
-        this.robots = robotloader.loadRobots(filePath, this.room);
-        for (BaseRobot robot : robots){
-            if (robot.getParams().charAt(0) == 'P'){
-                playerModel = (ControlledRobot) robot;
-            }
-            room.addRobot(robot);
-        }
+        room.addObstacle(obstacleloader.loadObstacles(filePath));
+        room.addRobot(robotloader.loadRobots(filePath, room));
+        playerModel = room.getPlayer();
+        if(playerModel != null)
+            keyListenerSetUp();
 
-        keyListenerSetUp();
         simulation.setCycleCount(Timeline.INDEFINITE);
         simulation.play();
     }

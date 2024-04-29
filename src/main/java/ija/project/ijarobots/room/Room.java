@@ -6,6 +6,7 @@ import ija.project.ijarobots.common.Area;
 import ija.project.ijarobots.common.Obstacle;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
+import ija.project.ijarobots.robots.ControlledRobot;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -28,12 +29,31 @@ public class Room implements Area {
         anchor.getChildren().add(r.getShape());
     }
 
+    public void addRobot(ArrayList<Robot> robots){
+        for(Robot r : robots)
+            this.addRobot(r);
+    }
+
+    public ControlledRobot getPlayer(){
+        for(Robot r : this.robots){
+            if(r instanceof ControlledRobot)
+                return (ControlledRobot)r;
+        }
+        return null;
+    }
+
     public ArrayList<Robot> getRobots() {
         return this.robots;
     }
+
     public void addObstacle(Obstacle o){
-        items.add(o);
-        anchor.getChildren().add(o.getShape());
+        this.items.add(o);
+        this.anchor.getChildren().add(o.getShape());
+    }
+    public void addObstacle(ArrayList<Obstacle> o){
+        for (Obstacle obstacle : o){
+            this.addObstacle(obstacle);
+        }
     }
 
     @Override

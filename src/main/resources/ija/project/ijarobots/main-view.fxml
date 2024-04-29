@@ -26,15 +26,15 @@
   <AnchorPane GridPane.fillHeight="true" GridPane.fillWidth="true"
               GridPane.columnIndex="0"
               GridPane.rowIndex="0"
-              style="-fx-background-color: red"
+              style="-fx-background-color: purple"
               fx:id="robotPlayground">
-
-    <children></children>
   </AnchorPane>
 
-  <Button fx:id="testBtn" text="displaySize" onAction="#changeBackground"
-            GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+  <GridPane
+          GridPane.fillHeight="true" GridPane.fillWidth="true"
+          GridPane.columnIndex="0" GridPane.rowIndex="1"
+          style="-fx-background-color: blue"
+          fx:id="controls">
 
-  <Label fx:id="label" text="chngColor"
-          GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+  </GridPane>
 </GridPane>

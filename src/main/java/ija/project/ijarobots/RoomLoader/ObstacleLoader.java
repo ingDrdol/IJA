@@ -19,9 +19,9 @@ public class ObstacleLoader {
 
     }
 
-    public List<Obstacle> loadObstacles(String filePath){
+    public ArrayList<Obstacle> loadObstacles(String filePath){
         List<List<String>> Atributes = new ArrayList<>();
-        List<Obstacle> obstacles = new ArrayList<Obstacle>();
+        ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 
         try {
             BufferedReader buffer = new BufferedReader(new FileReader(filePath));
@@ -45,7 +45,7 @@ public class ObstacleLoader {
         return obstacles;
     }
 
-    public void exportObstacles(String filePath, Area area){
+    public void exportObstacles(String filePath, Area area) throws Exception {
         List<Obstacle> obstacles = area.getObstacles();
         try {
             FileWriter writer = new FileWriter(filePath, true);
@@ -56,7 +56,6 @@ public class ObstacleLoader {
             }
             buffer.close();
         } catch (Exception e){
-
         }
     }
 }
