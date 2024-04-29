@@ -60,9 +60,9 @@
       <Button text="import" HBox.hgrow="ALWAYS"/>
       <Button text="export" HBox.hgrow="ALWAYS"/>
     </HBox>
-    <Button prefWidth="80" text="play" GridPane.halignment="CENTER"
+    <Button prefWidth="80" text="play" GridPane.halignment="CENTER" onAction="#play"
             GridPane.columnIndex="2" GridPane.rowIndex="0" />
-    <Button prefWidth="80" text="pause" GridPane.halignment="CENTER"
+    <Button prefWidth="80" text="pause" GridPane.halignment="CENTER" onAction="#pause"
             GridPane.columnIndex="2" GridPane.rowIndex="1" />
     <Button prefWidth="80" text="reverse" GridPane.halignment="CENTER"
             GridPane.columnIndex="2" GridPane.rowIndex="2" />

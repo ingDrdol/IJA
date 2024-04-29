@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,11 @@ public class Room implements Area {
                 return (ControlledRobot)r;
         }
         return null;
+    }
+
+    public void removeRobot(Robot r){
+        this.anchor.getChildren().remove(r.getShape());
+        this.robots.remove(r);
     }
 
     public ArrayList<Robot> getRobots() {
@@ -76,9 +82,7 @@ public class Room implements Area {
     }
 
     @Override
-    public List<Obstacle> getObstacles() {
-        return null;
-    }
+    public List<Obstacle> getObstacles() {return this.items;}
 
     public int getRows(){
         return (int)this.anchor.getHeight();

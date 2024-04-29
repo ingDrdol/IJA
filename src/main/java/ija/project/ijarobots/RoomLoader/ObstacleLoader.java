@@ -45,13 +45,13 @@ public class ObstacleLoader {
         return obstacles;
     }
 
-    public void exportObstacles(String filePath, Area area) throws Exception {
-        List<Obstacle> obstacles = area.getObstacles();
+    public void exportObstacles(String filePath, Room room){
+        List<Obstacle> obstacles = room.getObstacles();
         try {
             FileWriter writer = new FileWriter(filePath, true);
             BufferedWriter buffer = new BufferedWriter(writer);
-            for (Obstacle object : obstacles) {
-                buffer.write(object.getParams());
+            for (Obstacle obj : obstacles) {
+                buffer.write(obj.getParams());
                 buffer.newLine();
             }
             buffer.close();

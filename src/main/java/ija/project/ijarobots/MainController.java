@@ -16,7 +16,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -26,6 +29,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +43,13 @@ public class MainController implements Initializable {
     @FXML
     AnchorPane robotPlayground;
     @FXML
-    Label label;
-    @FXML
     GridPane frame;
     ControlledRobot playerModel;
     Room room;
+    @FXML
+    TextField xCord, yCord, size, fileName;
+    @FXML
+    ComboBox<String> addingOption;
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
         @Override
@@ -64,26 +71,26 @@ public class MainController implements Initializable {
 
             room.moveRobots();
             drawRobots();
-            label.setText(String.format("speed: %.1f", playerModel.getSpeed()));
         }
     }));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String filePath = "data/roomSetup.csv";
         room = new Room(robotPlayground);
-
-        ObstacleLoader obstacleloader = new ObstacleLoader();
-        RobotLoader robotloader = new RobotLoader();
-
-        room.addObstacle(obstacleloader.loadObstacles(filePath));
-        room.addRobot(robotloader.loadRobots(filePath, room));
-        playerModel = room.getPlayer();
-        if(playerModel != null)
-            keyListenerSetUp();
-
+        playerModel = new ControlledRobot(room.getRows()/2, room.getCols()/2, 20, room);
+        room.addRobot(playerModel);
+        drawRobots();
+        keyListenerSetUp();
         simulation.setCycleCount(Timeline.INDEFINITE);
+    }
+
+    @FXML
+    public void play(){
         simulation.play();
+    }
+    @FXML
+    public void pause(){
+        simulation.pause();
     }
 
     private void keyListenerSetUp(){
@@ -128,5 +135,50 @@ public class MainController implements Initializable {
             robot.reverseMove();
         }
         drawRobots();
+    }
+
+    public void importRoom() throws Exception {
+        String filePath = "data/" + fileName.toString();
+        File file = new File(filePath);
+        if (!file.exists()){
+            throw new Exception("File " + fileName.toString() + " not found");
+        }
+        ObstacleLoader obstacleloader = new ObstacleLoader();
+        RobotLoader robotloader = new RobotLoader();
+
+        room.addObstacle(obstacleloader.loadObstacles(filePath));
+        room.addRobot(robotloader.loadRobots(filePath, room));
+        room.removeRobot(playerModel);
+        playerModel = room.getPlayer();
+    }
+
+    public void exportRoom(){
+        String filePath = "data/" + fileName.toString();
+        ObstacleLoader obstacleloader = new ObstacleLoader();
+        RobotLoader robotloader = new RobotLoader();
+        try {
+            new FileWriter(filePath, false).close();
+            robotloader.exportRobots(filePath, room);
+            obstacleloader.exportObstacles(filePath, room);
+        } catch (Exception e) {}
+    }
+
+    public void addItem(){
+        int x = Integer.parseInt(xCord.getText());
+        int y = Integer.parseInt(yCord.getText());
+        int s = Integer.parseInt(size.getText());
+        switch (addingOption.toString()){
+            case "Robot":
+                AutomatedRobot newRobot = new AutomatedRobot(x, y, s, room);
+                room.addRobot(newRobot);
+                break;
+            case "Square":
+                Square newSquare = new Square(x, y, s);
+                room.addObstacle(newSquare);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + addingOption.toString());
+        }
+
     }
 }
