@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <GridPane fx:id="frame" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="ija.project.ijarobots.MainController">
   <columnConstraints>
     <ColumnConstraints percentWidth="100" />
@@ -15,7 +17,7 @@
 
 
   <AnchorPane fx:id="robotPlayground" style="-fx-background-color: purple" GridPane.columnIndex="0" GridPane.fillHeight="true" GridPane.fillWidth="true" GridPane.rowIndex="0">
-    <Label fx:id="label" style="-fx-text-fill: white; -fx-font-weight: bold" text="chngColor" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" />
+    <Label fx:id="speedLabel" style="-fx-text-fill: white; -fx-font-weight: bold" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" />
   </AnchorPane>
   <GridPane minHeight="60" GridPane.columnIndex="0" GridPane.rowIndex="1">
     <padding>
@@ -35,36 +37,43 @@
       <padding>
         <Insets right="5" top="5" bottom="5" left="5"/>
       </padding>
-      <TextField promptText="coordination x" focusTraversable="false"/>
+      <TextField promptText="coordination x" focusTraversable="false" fx:id="xCord" />
     </HBox>
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="1">
       <padding>
         <Insets right="5" top="5" bottom="5" left="5"/>
       </padding>
-      <TextField promptText="coordination y" focusTraversable="false"/>
+      <TextField promptText="coordination y" focusTraversable="false" fx:id="yCord" />
     </HBox>
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
       <padding>
         <Insets right="5" top="5" bottom="5" left="5"/>
       </padding>
-      <TextField promptText="size" focusTraversable="false"/>
+      <TextField promptText="size" focusTraversable="false" fx:id="size" />
     </HBox>
     <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5">
-      <ComboBox prefWidth="100"/>
-      <Button text="add"  />
+      <ComboBox prefWidth="100" fx:id="addingOption">
+        <items>
+          <FXCollections fx:factory="observableArrayList">
+            <String fx:value="Robot"/>
+            <String fx:value="Obstacle"/>
+          </FXCollections>
+        </items>
+      </ComboBox>
+      <Button text="add" onAction="#addItem" fx:id="addButton"/>
     </HBox>
-    <TextField GridPane.rowIndex="1" GridPane.columnIndex="1" focusTraversable="false" promptText="file name *.csv"/>
+    <TextField GridPane.rowIndex="1" GridPane.columnIndex="1" focusTraversable="false" promptText="file name *.csv" fx:id="fileName"/>
     <HBox GridPane.columnIndex="1" GridPane.rowIndex="2"
           GridPane.fillWidth="true" spacing="5" GridPane.hgrow="ALWAYS">
       <Region HBox.hgrow="ALWAYS"/>
-      <Button text="import" HBox.hgrow="ALWAYS"/>
-      <Button text="export" HBox.hgrow="ALWAYS"/>
+      <Button text="import" HBox.hgrow="ALWAYS" onAction="#importRoom"/>
+      <Button text="export" HBox.hgrow="ALWAYS" onAction="#exportRoom"/>
     </HBox>
-    <Button prefWidth="80" text="play" GridPane.halignment="CENTER" onAction="#play"
+    <Button prefWidth="80" text="Play" GridPane.halignment="CENTER" onAction="#play"
             GridPane.columnIndex="2" GridPane.rowIndex="0" />
-    <Button prefWidth="80" text="pause" GridPane.halignment="CENTER" onAction="#pause"
+    <Button prefWidth="80" text="Pause" GridPane.halignment="CENTER" onAction="#pause"
             GridPane.columnIndex="2" GridPane.rowIndex="1" />
-    <Button prefWidth="80" text="reverse" GridPane.halignment="CENTER"
+    <Button prefWidth="80" text="Reverse" GridPane.halignment="CENTER" onAction="#reverseAction" fx:id="reverseButton"
             GridPane.columnIndex="2" GridPane.rowIndex="2" />
   </GridPane>
 </GridPane>

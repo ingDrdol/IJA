@@ -2,12 +2,11 @@ package ija.project.ijarobots;
 
 import ija.project.ijarobots.RoomLoader.ObstacleLoader;
 import ija.project.ijarobots.RoomLoader.RobotLoader;
-import ija.project.ijarobots.common.Obstacle;
+import ija.project.ijarobots.common.Logger;
 import ija.project.ijarobots.common.Position;
 import ija.project.ijarobots.common.Robot;
 import ija.project.ijarobots.obstacles.Square;
 import ija.project.ijarobots.robots.AutomatedRobot;
-import ija.project.ijarobots.robots.BaseRobot;
 import ija.project.ijarobots.robots.ControlledRobot;
 import ija.project.ijarobots.room.Room;
 import javafx.animation.KeyFrame;
@@ -16,24 +15,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -50,12 +41,17 @@ public class MainController implements Initializable {
     TextField xCord, yCord, size, fileName;
     @FXML
     ComboBox<String> addingOption;
+    @FXML
+    Label speedLabel;
+    @FXML
+    Button reverseButton, addButton;
+    Logger logger = new Logger();
 
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
             if (reverse){
-                reverse();
+                reverseMoves();
                 return;
             }
             if (playerModel != null){
@@ -71,13 +67,14 @@ public class MainController implements Initializable {
 
             room.moveRobots();
             drawRobots();
+            speedLabel.setText(String.format("Speed: %.1f", playerModel.getSpeed()));
         }
     }));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
-        playerModel = new ControlledRobot(room.getRows()/2, room.getCols()/2, 20, room);
+        playerModel = new ControlledRobot(500, 300, 20, room);
         room.addRobot(playerModel);
         drawRobots();
         keyListenerSetUp();
@@ -86,11 +83,27 @@ public class MainController implements Initializable {
 
     @FXML
     public void play(){
+        addButton.setDisable(true);
+        xCord.setDisable(true);
+        yCord.setDisable(true);
+        size.setDisable(true);
+        addingOption.setDisable(true);
         simulation.play();
     }
     @FXML
     public void pause(){
         simulation.pause();
+    }
+
+    @FXML
+    public void reverseAction(){
+        reverse = !reverse;
+        if (reverse){
+            reverseButton.setText("Stop");
+        }
+        else{
+            reverseButton.setText("Reverse");
+        }
     }
 
     private void keyListenerSetUp(){
@@ -130,54 +143,58 @@ public class MainController implements Initializable {
         }
     }
 
-    private void reverse(){
+    private void reverseMoves(){
         for (Robot robot : room.getRobots()){
             robot.reverseMove();
         }
         drawRobots();
     }
-
-    public void importRoom() throws Exception {
-        String filePath = "data/" + fileName.toString();
+    @FXML
+    public void importRoom(){
+        String filePath = "data/" + fileName.getText();
         File file = new File(filePath);
         if (!file.exists()){
-            throw new Exception("File " + fileName.toString() + " not found");
+            logger.log(System.Logger.Level.WARNING, "File " + fileName.getText() + " not found");
         }
         ObstacleLoader obstacleloader = new ObstacleLoader();
         RobotLoader robotloader = new RobotLoader();
 
-        room.addObstacle(obstacleloader.loadObstacles(filePath));
-        room.addRobot(robotloader.loadRobots(filePath, room));
+        room.addObstacle(obstacleloader.loadObstacles(filePath, logger));
+        room.addRobot(robotloader.loadRobots(filePath, room, logger));
         room.removeRobot(playerModel);
         playerModel = room.getPlayer();
+        drawRobots();
     }
-
+    @FXML
     public void exportRoom(){
-        String filePath = "data/" + fileName.toString();
+        String filePath = "data/" + fileName.getText();
         ObstacleLoader obstacleloader = new ObstacleLoader();
         RobotLoader robotloader = new RobotLoader();
         try {
             new FileWriter(filePath, false).close();
-            robotloader.exportRobots(filePath, room);
-            obstacleloader.exportObstacles(filePath, room);
-        } catch (Exception e) {}
+            robotloader.exportRobots(filePath, room, logger);
+            obstacleloader.exportObstacles(filePath, room, logger);
+        } catch (Exception e) {
+            logger.log(System.Logger.Level.WARNING, e.getMessage());
+        }
     }
-
+    @FXML
     public void addItem(){
         int x = Integer.parseInt(xCord.getText());
         int y = Integer.parseInt(yCord.getText());
         int s = Integer.parseInt(size.getText());
-        switch (addingOption.toString()){
+        switch (addingOption.getValue()){
             case "Robot":
                 AutomatedRobot newRobot = new AutomatedRobot(x, y, s, room);
                 room.addRobot(newRobot);
+                drawRobots();
                 break;
-            case "Square":
+            case "Obstacle":
                 Square newSquare = new Square(x, y, s);
                 room.addObstacle(newSquare);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + addingOption.toString());
+                logger.log(System.Logger.Level.WARNING, "Unexpected value: " + addingOption.toString());
         }
 
     }

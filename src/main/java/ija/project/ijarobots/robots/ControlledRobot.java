@@ -21,6 +21,11 @@ public class ControlledRobot extends BaseRobot {
         this.shape.setFill(new ImagePattern(skin));
     }
 
+    public ControlledRobot(int r, int c, int size, Area a, int angle){
+        this(r, c, size, a);
+        this.angle = angle;
+    }
+
     @Override
     public Shape getShape() {
         return this.shape;
@@ -55,6 +60,7 @@ public class ControlledRobot extends BaseRobot {
         double x = this.row;
         double y = this.col;
         int r = this.radius;
-        return "P" + "," + String.valueOf(x) + "," +  String.valueOf(y) + "," +  String.valueOf(r);
+        int ang = this.angle;
+        return "P" + "," + String.valueOf((int)x) + "," +  String.valueOf((int)y) + "," +  String.valueOf((int)r) + "," +  String.valueOf((int)r);
     }
 }
