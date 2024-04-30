@@ -16,12 +16,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
+/**
+ * Class used to import obstacles from setup files and export obstacles positions to new setup files
+ *
+ * @author xvelic05 (xvelic05@stud.fit.vutbr.cz)
+ */
 public class ObstacleLoader {
+
+    /**
+     * Constructor with no parameters to create object of class RobotLoader
+     */
     public ObstacleLoader(){
 
     }
 
-    public ArrayList<Obstacle> loadObstacles(String filePath, Logger logger){
+    /**
+     * Method that reads content of *.csv file with records of robots and obstacles positions,
+     * loads obstacles with their parameters to created list of obstacles
+     * and returns list of loaded obstacles TODO fix
+     *
+     * @param filePath  Path to file with input configuration.
+     * @return          list of obstacles loaded from input configuration file.
+     */
+    public ArrayList<Obstacle> loadObstacles(String filePath){
         List<List<String>> Atributes = new ArrayList<>();
         ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 
@@ -33,11 +50,11 @@ public class ObstacleLoader {
                 String[] values = line.split(",");
                 Atributes.add(Arrays.asList(values));
             }
-            logger.log(System.Logger.Level.INFO, "BEGINNING OBSTACLE IMPORT");
+            Logger.getLogger().log(System.Logger.Level.INFO, "BEGINNING OBSTACLE IMPORT");
             for (List<String> object : Atributes) {
                 String type = object.get(0);
                 if (type.equals("S")) {
-                    logger.log(System.Logger.Level.INFO, object);
+                    Logger.getLogger().log(System.Logger.Level.INFO, object);
                     int cordX = Integer.parseInt(object.get(1));
                     int cordY = Integer.parseInt(object.get(2));
                     int size = Integer.parseInt(object.get(3));
@@ -45,31 +62,38 @@ public class ObstacleLoader {
                 }
             }
         } catch (Exception e){
-            logger.log(System.Logger.Level.ERROR, e.getMessage());
+            Logger.getLogger().log(System.Logger.Level.ERROR, e.getMessage());
         }
         finally {
-            logger.log(System.Logger.Level.INFO, "OBSTACLE IMPORT ENDED");
+            Logger.getLogger().log(System.Logger.Level.INFO, "OBSTACLE IMPORT ENDED");
         }
         return obstacles;
     }
 
-    public void exportObstacles(String filePath, Room room, Logger logger){
+    /**
+     * Method that takes actual Obstacles positions and sizes
+     * and stores this information to new *.csv file with name entered in according text field.
+     *
+     * @param filePath  Path to file in with new configuration will be stored.
+     * @param room      Room that holds list of obstacless.
+     */
+    public void exportObstacles(String filePath, Room room){
         List<Obstacle> obstacles = room.getObstacles();
         try {
             FileWriter writer = new FileWriter(filePath, true);
             BufferedWriter buffer = new BufferedWriter(writer);
-            logger.log(System.Logger.Level.INFO, "BEGINNING OBSTACLE EXPORT");
+            Logger.getLogger().log(System.Logger.Level.INFO, "BEGINNING OBSTACLE EXPORT");
             for (Obstacle obj : obstacles) {
-                logger.log(System.Logger.Level.INFO, obj.getParams());
+                Logger.getLogger().log(System.Logger.Level.INFO, obj.getParams());
                 buffer.write(obj.getParams());
                 buffer.newLine();
             }
             buffer.close();
         } catch (Exception e){
-            logger.log(System.Logger.Level.ERROR, e.getMessage());
+            Logger.getLogger().log(System.Logger.Level.ERROR, e.getMessage());
         }
         finally {
-            logger.log(System.Logger.Level.INFO, "OBSTACLE EXPORT ENDED");
+            Logger.getLogger().log(System.Logger.Level.INFO, "OBSTACLE EXPORT ENDED");
         }
     }
 }

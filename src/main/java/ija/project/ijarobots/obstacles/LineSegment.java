@@ -49,9 +49,6 @@ public class LineSegment implements Obstacle {
                 return true;
             }
         }
-        if(pointD == radius){
-            r.stop();
-        }
         return false;
     }
 

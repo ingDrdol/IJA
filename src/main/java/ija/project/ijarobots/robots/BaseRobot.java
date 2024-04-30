@@ -25,12 +25,19 @@ public abstract class BaseRobot implements Robot {
         this.history = new ArrayList<>();
         this.history.add(new HistoryRecord(new Position(r, c), this.angle, this.speed));
     }
+
+    public abstract int getDetectRadius();
+
     @Override
     public boolean colision(Robot r, Position p) {
+        return !(this.getPosition().distance(p) > r.getDetectRadius() + this.getRadius());
+    }
+
+    public boolean hardColision(Robot r, Position p) {
         return !(this.getPosition().distance(p) > r.getRadius() + this.getRadius());
     }
 
-    protected boolean canMove(Position dest){
+    public boolean canMove(Position dest){
         return !ar.robotCollision(this, dest);
     }
 
@@ -45,12 +52,6 @@ public abstract class BaseRobot implements Robot {
     @Override
     public Position getPosition() {
         return new Position(this.row, this.col);
-    }
-
-    @Override
-    public void stop(){
-        this.dirX = 0;
-        this.dirY = 0;
     }
 
     @Override
@@ -98,7 +99,6 @@ public abstract class BaseRobot implements Robot {
     public String getParams(){
         return null;
     }
-
 }
 
 record HistoryRecord (

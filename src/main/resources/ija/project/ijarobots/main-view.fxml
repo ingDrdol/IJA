@@ -66,7 +66,7 @@
     <HBox GridPane.columnIndex="1" GridPane.rowIndex="2"
           GridPane.fillWidth="true" spacing="5" GridPane.hgrow="ALWAYS">
       <Region HBox.hgrow="ALWAYS"/>
-      <Button text="import" HBox.hgrow="ALWAYS" onAction="#importRoom"/>
+      <Button text="import" HBox.hgrow="ALWAYS" onAction="#importRoom" fx:id="importButton"/>
       <Button text="export" HBox.hgrow="ALWAYS" onAction="#exportRoom"/>
     </HBox>
     <Button prefWidth="80" text="Play" GridPane.halignment="CENTER" onAction="#play"

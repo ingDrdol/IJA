@@ -27,6 +27,11 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.ResourceBundle;
 
+/**
+ * Class that services FXML objects
+ * @author xkocma09 (xkocma09@stud.fit.vutbr.cz)
+ * @author xvelic05 (xvelic05@stud.fit.vutbr.cz)
+ */
 public class MainController implements Initializable {
 
     ArrayList<Character> keys = new ArrayList<>();
@@ -44,9 +49,11 @@ public class MainController implements Initializable {
     @FXML
     Label speedLabel;
     @FXML
-    Button reverseButton, addButton;
-    Logger logger = new Logger();
+    Button reverseButton, addButton, importButton;
 
+    /**
+     * TODO
+     */
     Timeline simulation = new Timeline(new KeyFrame(Duration.seconds(1.0 / 20), new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -71,6 +78,14 @@ public class MainController implements Initializable {
         }
     }));
 
+    /**
+     * Initializes room with controllable robot, sets keyListener and simulation.
+     * Prepares application for start.
+     *
+     * @param url               TODO
+     * @param resourceBundle    TODO
+     * @see #keyListenerSetUp()
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         room = new Room(robotPlayground);
@@ -81,6 +96,11 @@ public class MainController implements Initializable {
         simulation.setCycleCount(Timeline.INDEFINITE);
     }
 
+    /**
+     * Checks all robots to permanent collisions due to wrong room setup,
+     * plays the game and disables all initializing GUI options.
+     * Called when Play button is pressed.
+     */
     @FXML
     public void play(){
         addButton.setDisable(true);
@@ -88,13 +108,25 @@ public class MainController implements Initializable {
         yCord.setDisable(true);
         size.setDisable(true);
         addingOption.setDisable(true);
+        importButton.setDisable(true);
+        this.room.initCollisions();
         simulation.play();
     }
+
+    /**
+     * Pauses the game.
+     * Called when Pause button is pressed.
+     */
     @FXML
     public void pause(){
         simulation.pause();
     }
 
+    /**
+     * Plays reversed record of the game.
+     * Called when Reverse button is pressed, canceled when Stop button is pressed.
+     * Game continuous normally after Stopping reversed play.
+     */
     @FXML
     public void reverseAction(){
         reverse = !reverse;
@@ -106,6 +138,13 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Sets up key listener, that reacts to selected keyboard keys which have assigned functionality.
+     * When key is pressed, its symbol is added to list of pressed keys.
+     * When key is released, its symbol is removed from the list.
+     *
+     * @see #keys
+     */
     private void keyListenerSetUp(){
         frame.setOnKeyPressed(key -> {
             switch(key.getCode()){
@@ -129,11 +168,22 @@ public class MainController implements Initializable {
         });
     }
 
+    /**
+     * Method that is used by key listener to add character corresponding to key to the list
+     * of pressed keys.
+     *
+     * @param c     Character to be added to list
+     *
+     * @see #keyListenerSetUp()
+     */
     private void addSingle(Character c){
         if (!keys.contains(c))
             keys.add(c);
     }
 
+    /**
+     * Draws all robots to according positions on screen.
+     */
     private void drawRobots(){
         for(Robot robot : room.getRobots()){
             Position p = robot.getPosition();
@@ -143,28 +193,43 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Reverses direction of movement of all robots
+     */
     private void reverseMoves(){
         for (Robot robot : room.getRobots()){
             robot.reverseMove();
         }
         drawRobots();
     }
+
+    /**
+     * Imports robots and obstacles setup from *.csv file.
+     * Takes files from Data folder.
+     * Called after writing filename to according text field and pressing button Import.
+     */
     @FXML
     public void importRoom(){
         String filePath = "data/" + fileName.getText();
         File file = new File(filePath);
         if (!file.exists()){
-            logger.log(System.Logger.Level.WARNING, "File " + fileName.getText() + " not found");
+            Logger.getLogger().log(System.Logger.Level.WARNING, "File " + fileName.getText() + " not found");
         }
         ObstacleLoader obstacleloader = new ObstacleLoader();
         RobotLoader robotloader = new RobotLoader();
 
-        room.addObstacle(obstacleloader.loadObstacles(filePath, logger));
-        room.addRobot(robotloader.loadRobots(filePath, room, logger));
+        room.addObstacle(obstacleloader.loadObstacles(filePath));
+        room.addRobot(robotloader.loadRobots(filePath, room));
         room.removeRobot(playerModel);
         playerModel = room.getPlayer();
         drawRobots();
     }
+
+    /**
+     * Exports current position of all robots and obstacles to *.csv file as room setup.
+     * Stores files to Data folder.
+     * Called after writing filename to according text field and pressing button Export.
+     */
     @FXML
     public void exportRoom(){
         String filePath = "data/" + fileName.getText();
@@ -172,12 +237,17 @@ public class MainController implements Initializable {
         RobotLoader robotloader = new RobotLoader();
         try {
             new FileWriter(filePath, false).close();
-            robotloader.exportRobots(filePath, room, logger);
-            obstacleloader.exportObstacles(filePath, room, logger);
+            robotloader.exportRobots(filePath, room);
+            obstacleloader.exportObstacles(filePath, room);
         } catch (Exception e) {
-            logger.log(System.Logger.Level.WARNING, e.getMessage());
+            Logger.getLogger().log(System.Logger.Level.WARNING, e.getMessage());
         }
     }
+
+    /**
+     * Takes coordinates and size entered to according text fields, type of adding object from
+     * dropbox and adds robot or obstacle to according position on play field.
+     */
     @FXML
     public void addItem(){
         int x = Integer.parseInt(xCord.getText());
@@ -185,16 +255,20 @@ public class MainController implements Initializable {
         int s = Integer.parseInt(size.getText());
         switch (addingOption.getValue()){
             case "Robot":
+                Logger.getLogger().log(System.Logger.Level.INFO, "ROBOT OF SIZE " + s +
+                " ADDED TO POSITION " + x + " " + y);
                 AutomatedRobot newRobot = new AutomatedRobot(x, y, s, room);
                 room.addRobot(newRobot);
                 drawRobots();
                 break;
             case "Obstacle":
+                Logger.getLogger().log(System.Logger.Level.INFO, "OBSTACLE OF SIZE " + s +
+                " ADDED TO POSITION " + x + " " + y);
                 Square newSquare = new Square(x, y, s);
                 room.addObstacle(newSquare);
                 break;
             default:
-                logger.log(System.Logger.Level.WARNING, "Unexpected value: " + addingOption.toString());
+                Logger.getLogger().log(System.Logger.Level.WARNING, "Unexpected value: " + addingOption.toString());
         }
 
     }

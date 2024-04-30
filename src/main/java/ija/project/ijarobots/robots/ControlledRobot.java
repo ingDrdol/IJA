@@ -1,11 +1,7 @@
 package ija.project.ijarobots.robots;
 
 
-import ija.project.ijarobots.common.Area;
-import ija.project.ijarobots.common.Obstacle;
-import ija.project.ijarobots.common.Position;
-import ija.project.ijarobots.common.Robot;
-import javafx.geometry.Pos;
+import ija.project.ijarobots.common.*;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -62,5 +58,33 @@ public class ControlledRobot extends BaseRobot {
         int r = this.radius;
         int ang = this.angle;
         return "P" + "," + String.valueOf((int)x) + "," +  String.valueOf((int)y) + "," +  String.valueOf((int)r) + "," +  String.valueOf((int)r);
+    }
+
+    @Override
+    public int getDetectRadius() {
+        return this.radius;
+    }
+
+    @Override
+    public boolean colision(Robot r, Position p) {
+
+        if(super.colision(r, p)){
+            double x = p.getRow() - this.row;
+            double y = p.getCol() - this.col;
+            double incomingAngle = y < 0 ? (angleFromDirection(x, y) + 180)%360 : angleFromDirection(x, y);
+            double collisionAngle = ((incomingAngle + 180) % 360 - r.getAngle());
+            Logger.getLogger().log(System.Logger.Level.INFO, r.hashCode() + " col from: " +collisionAngle + " cur angle: " + r.getAngle());
+            if(collisionAngle < 180 && collisionAngle > 0){
+                return true;
+            }
+            return super.hardColision(r, p);
+
+        }
+        return false;
+    }
+
+    private double angleFromDirection(double x, double y){
+        double cos = x/Math.sqrt(x*x+y*y);
+        return Math.toDegrees(Math.acos(cos));
     }
 }

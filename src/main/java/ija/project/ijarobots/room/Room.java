@@ -2,10 +2,7 @@ package ija.project.ijarobots.room;
 
 
 
-import ija.project.ijarobots.common.Area;
-import ija.project.ijarobots.common.Obstacle;
-import ija.project.ijarobots.common.Position;
-import ija.project.ijarobots.common.Robot;
+import ija.project.ijarobots.common.*;
 import ija.project.ijarobots.robots.ControlledRobot;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
@@ -118,5 +115,19 @@ public class Room implements Area {
     public void moveRobots(){
         for(Robot robot : robots)
             robot.move();
+    }
+
+    public void initCollisions(){
+        List<Robot> collidedRobots = new ArrayList<>();
+        for (Robot r : this.robots){
+            if (!r.canMove(r.getPosition())){
+                collidedRobots.add(r);
+                Logger.getLogger().log(System.Logger.Level.WARNING, "ROBOT " + r.getParams()
+                + " WAS DELETED DUE TO COLLISION WHILE INITIALIZATION");
+            }
+        }
+        for (Robot r : collidedRobots){
+            this.removeRobot(r);
+        }
     }
 }

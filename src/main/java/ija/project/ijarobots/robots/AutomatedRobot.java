@@ -2,6 +2,7 @@ package ija.project.ijarobots.robots;
 
 import ija.project.ijarobots.common.Area;
 import ija.project.ijarobots.common.Position;
+import ija.project.ijarobots.common.Robot;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -11,13 +12,13 @@ import java.util.Random;
 
 public class AutomatedRobot extends BaseRobot{
     private final Random rand = new Random();
-    private int size;
+    private int detectRadius;
     private boolean turning = false;
     private int turnAngle = 0;
-    private Shape shape;
+    private final Shape shape;
     public AutomatedRobot(int r, int c, int size, Area a) {
         super(r, c, (size + 5), a);
-        this.size = size;
+        this.detectRadius = size + 10;
         this.speed = 2;
         this.shape = new Circle(0, 0, size);
         Image skin = new Image("file:data/playerBackground.jpg");
@@ -71,5 +72,23 @@ public class AutomatedRobot extends BaseRobot{
         int r = this.radius;
         int ang = this.angle;
         return "R" + "," + String.valueOf((int)x) + "," +  String.valueOf((int)y) + "," +  String.valueOf((int)r) + "," +  String.valueOf((int)ang);
+    }
+
+    @Override
+    public int getDetectRadius() {
+        return this.detectRadius;
+    }
+
+    @Override
+    public boolean colision(Robot r, Position p) {
+        if(r instanceof ControlledRobot)
+            return super.hardColision(r, p);
+
+        return super.colision(r, p);
+    }
+
+    private double angleFromDirection(double x, double y){
+        double cos = x/Math.sqrt(x*x+y*y);
+        return Math.toDegrees(Math.acos(cos));
     }
 }
