@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import java.util.Random;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 public class AutomatedRobot extends BaseRobot{
     private final Random rand = new Random();
@@ -83,19 +84,14 @@ public class AutomatedRobot extends BaseRobot{
 
     @Override
     public boolean colision(Robot r, Position p) {
-        if(super.colision(r, p)) {
-            return true;
-           /* double x = this.row - p.getRow();
-            double y = this.col - p.getCol();
-            double collisionAngle = Math.toDegrees(
-                                    Math.atan(y/x));
-            double drawnAngle = this.angle * (-1) + 180;
-            double a = abs(drawnAngle - collisionAngle) - 90;
-            Logger.getLogger().log(System.Logger.Level.INFO, "Robot: " + r.hashCode() +" collision angle: " + a
-            + " direction: " + drawnAngle + " angle: " + collisionAngle);
-            return a <= 90;*/
+        if(r instanceof ControlledRobot)
+            return super.hardColision(r, p);
 
-        }
-        return false;
+        return super.colision(r, p);
+    }
+
+    private double angleFromDirection(double x, double y){
+        double cos = x/sqrt(x*x+y*y);
+        return Math.toDegrees(Math.acos(cos));
     }
 }

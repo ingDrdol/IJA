@@ -30,13 +30,17 @@ public abstract class BaseRobot implements Robot {
         return !(this.getPosition().distance(p) > r.getDetectRadius() + this.getRadius());
     }
 
+    public boolean hardColision(Robot r, Position p) {
+        return !(this.getPosition().distance(p) > r.getRadius() + this.getRadius());
+    }
+
     protected boolean canMove(Position dest){
         return !ar.robotCollision(this, dest);
     }
 
     @Override
     public void turn(int degrees) {
-        this.angle += degrees % 360;
+        this.angle = (this.angle + degrees) % 360;
     }
 
     @Override
