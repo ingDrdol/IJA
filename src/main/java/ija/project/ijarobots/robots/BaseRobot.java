@@ -27,7 +27,7 @@ public abstract class BaseRobot implements Robot {
     }
     @Override
     public boolean colision(Robot r, Position p) {
-        return !(this.getPosition().distance(p) > r.getRadius() + this.getRadius());
+        return !(this.getPosition().distance(p) > r.getDetectRadius() + this.getRadius());
     }
 
     protected boolean canMove(Position dest){
@@ -36,7 +36,7 @@ public abstract class BaseRobot implements Robot {
 
     @Override
     public void turn(int degrees) {
-        this.angle += degrees;
+        this.angle += degrees % 360;
     }
 
     @Override
@@ -47,11 +47,6 @@ public abstract class BaseRobot implements Robot {
         return new Position(this.row, this.col);
     }
 
-    @Override
-    public void stop(){
-        this.dirX = 0;
-        this.dirY = 0;
-    }
 
     @Override
     public boolean containsPosition(Position p) {
@@ -60,12 +55,6 @@ public abstract class BaseRobot implements Robot {
 
     @Override
     public int getAngle() {return this.angle;}
-
-    public void changeDirX(int x){
-        this.dirX = this.dirX + x;
-    }
-
-    public void changeDirY(int y){ this.dirY = this.dirY + y; }
 
     public void getDirection(){
         double sin = Math.sin(Math.toRadians(this.angle));

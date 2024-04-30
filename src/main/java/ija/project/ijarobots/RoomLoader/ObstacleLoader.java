@@ -21,7 +21,8 @@ public class ObstacleLoader {
 
     }
 
-    public ArrayList<Obstacle> loadObstacles(String filePath, Logger logger){
+    public ArrayList<Obstacle> loadObstacles(String filePath){
+        Logger logger = Logger.getLogger();
         List<List<String>> Atributes = new ArrayList<>();
         ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 

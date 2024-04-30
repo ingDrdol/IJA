@@ -159,7 +159,7 @@ public class MainController implements Initializable {
         ObstacleLoader obstacleloader = new ObstacleLoader();
         RobotLoader robotloader = new RobotLoader();
 
-        room.addObstacle(obstacleloader.loadObstacles(filePath, logger));
+        room.addObstacle(obstacleloader.loadObstacles(filePath));
         room.addRobot(robotloader.loadRobots(filePath, room, logger));
         room.removeRobot(playerModel);
         playerModel = room.getPlayer();

@@ -8,6 +8,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 public class Logger implements System.Logger {
+    private static final Logger logger = new Logger();
+    public static Logger getLogger() {return logger;}
+
 
     private final File file = new File("data/log.txt");
     @Override

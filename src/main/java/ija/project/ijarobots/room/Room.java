@@ -108,11 +108,11 @@ public class Room implements Area {
                     return true;
             }
         }
-        if (p.getCol() - r.getRadius() < 0 || p.getRow() - r.getRadius() < 0)
+        if (p.getCol() - r.getDetectRadius() < 0 || p.getRow() - r.getDetectRadius() < 0)
             return true;
 
-        return p.getCol() + r.getRadius() > this.getRows()
-                || p.getRow() + r.getRadius() > this.getCols();
+        return p.getCol() + r.getDetectRadius() > this.getRows()
+                || p.getRow() + r.getDetectRadius() > this.getCols();
     }
 
     public void moveRobots(){

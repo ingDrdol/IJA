@@ -14,18 +14,11 @@ import static java.lang.Math.abs;
 
 public class LineSegment implements Obstacle {
     private final Position start, end;
-    private final double A, B, C;
     public LineSegment(Position start, Position end) {
         this.start = start;
         this.end = end;
-        this.A = end.getRow() - start.getRow();
-        this.B = end.getCol() - start.getCol();
-        this.C = getCConst(start);
     }
 
-    private double getCConst(Position start) {
-        return (this.A * start.getRow() + this.B * start.getCol()) * (-1);
-    }
 
     @Override
     public boolean containsPosition(Position p) {
@@ -36,7 +29,7 @@ public class LineSegment implements Obstacle {
 
     @Override
     public boolean colision(Robot r, Position p) {
-        int radius = r.getRadius();
+        int radius = r.getDetectRadius();
         double pointD = this.pointDistance(p);
         if (pointD < radius){
             double side = Math.max(start.distance(p), end.distance(p));
@@ -48,9 +41,6 @@ public class LineSegment implements Obstacle {
             else{
                 return true;
             }
-        }
-        if(pointD == radius){
-            r.stop();
         }
         return false;
     }

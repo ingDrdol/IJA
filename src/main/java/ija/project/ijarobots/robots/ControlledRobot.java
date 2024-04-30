@@ -45,6 +45,11 @@ public class ControlledRobot extends BaseRobot {
         return true;
     }
 
+    @Override
+    public int getDetectRadius() {
+        return this.radius;
+    }
+
     public void speedUp(){
         if (this.speed < 4)
             this.speed += 0.1;
