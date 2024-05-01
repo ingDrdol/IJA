@@ -58,7 +58,7 @@ public abstract class BaseRobot implements Robot {
     }
 
     @Override
-    public int getAngle() {return this.angle;}
+    public int getAngle() {return this.angle < 0 ? 360 + this.angle : this.angle; }
 
     public void getDirection(){
         double sin = Math.sin(Math.toRadians(this.angle));

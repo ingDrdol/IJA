@@ -8,6 +8,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 public class ControlledRobot extends BaseRobot {
@@ -74,10 +75,12 @@ public class ControlledRobot extends BaseRobot {
         if(super.colision(r, p)){
             double x = p.getRow() - this.row;
             double y = p.getCol() - this.col;
-            double incomingAngle = y < 0 ? (angleFromDirection(x, y) + 180)%360 : angleFromDirection(x, y);
-            double collisionAngle = ((incomingAngle + 180) % 360 - r.getAngle());
+            double incomingAngle = getIncomingAngle(x, y);
+            if(y == 0)
+                incomingAngle = x < 0 ? 0 : 180;
+            double collisionAngle = abs(incomingAngle - r.getAngle());
             Logger.getLogger().log(System.Logger.Level.INFO, r.hashCode() + " col from: " +collisionAngle + " cur angle: " + r.getAngle());
-            if(collisionAngle < 180 && collisionAngle > 0){
+            if(collisionAngle <= 90 || collisionAngle >= 270){
                 return true;
             }
             return super.hardColision(r, p);
@@ -86,8 +89,20 @@ public class ControlledRobot extends BaseRobot {
         return false;
     }
 
+    private double getIncomingAngle(double x, double y){
+        double angle = angleFromDirection(x, y);
+        if (y > 0){
+            if (x > 0)
+                return 360-angle;
+            else
+                return angle + 180;
+        }
+        else{
+            return angle;
+        }
+    }
     private double angleFromDirection(double x, double y){
         double cos = x/sqrt(x*x+y*y);
-        return Math.toDegrees(Math.acos(cos));
+        return 180 - Math.toDegrees(Math.acos(cos));
     }
 }
